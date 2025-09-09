@@ -5,9 +5,11 @@ import Image from "next/image";
 import { Plus, Minus } from "lucide-react";
 import useCartStore from "@/store/cartStore"; // Replace with your store
 import { Button } from "@/components/ui/button";
+import Rating from "../Rating";
+import { CartItem } from "@/types/productTypes";
 
-export default function Pdp({ product }) {
-  const { id, title, description, price, images, tags, rating, reviews } =
+export default function Pdp({ product }: { product: CartItem }) {
+  const { id, title, description, price, thumbnail, tags, rating, reviews } =
     product;
 
   // Cart state
@@ -48,10 +50,12 @@ export default function Pdp({ product }) {
         {/* Product Image */}
         <div className="flex-shrink-0 w-full md:w-1/2 h-80 relative">
           <Image
-            src={images[0] || "/placeholder.png"}
+            src={thumbnail || "/placeholder.png"}
             alt={title}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-contain rounded-md"
+            priority
           />
         </div>
 
@@ -60,7 +64,12 @@ export default function Pdp({ product }) {
           <h1 className="text-2xl font-bold">{title}</h1>
           <p className="text-gray-700">{description}</p>
           <p className="text-lg font-semibold">Price: ${price}</p>
-          <p className="text-sm text-gray-500">Rating: {rating} ⭐</p>
+          <div className="flex items-center gap-2">
+            {" "}
+            <p className="text-sm text-gray-500">Rating: {rating}</p>
+            <Rating rating={rating} />
+          </div>
+
           {tags && (
             <div className="flex flex-wrap gap-2 mt-2">
               {tags.map((tag, idx) => (
@@ -74,10 +83,9 @@ export default function Pdp({ product }) {
             </div>
           )}
 
-          {/* Cart Controls */}
           <div className="mt-4 flex items-center gap-4">
             {quantity > 0 ? (
-              <div className="flex items-center gap-2 border rounded-lg overflow-hidden">
+              <div className="flex items-center gap-2 border border-[#cccccc] rounded-lg overflow-hidden">
                 <Button
                   onClick={handleDecrement}
                   className="px-3 py-1 rounded-none"
@@ -95,24 +103,35 @@ export default function Pdp({ product }) {
                 </Button>
               </div>
             ) : (
-              <Button onClick={handleAddToCart}>Add to Cart</Button>
+              <Button
+                onClick={handleAddToCart}
+                className=" cursor-pointer bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-300"
+              >
+                Add to Cart
+              </Button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Reviews Section */}
       {reviews && reviews.length > 0 && (
         <div className="mt-8">
           <h2 className="text-xl font-semibold mb-4">Reviews</h2>
           <div className="flex flex-col gap-4">
             {reviews.map((review, idx) => (
-              <div key={idx} className="border p-4 rounded-md bg-gray-50">
-                <p className="font-semibold">{review.user}</p>
+              <div
+                key={idx}
+                className="border border-[#cccccc] p-4 rounded-md bg-gray-50"
+              >
+                <p className="font-semibold">{review.reviewerName}</p>
                 <p className="text-gray-600">{review.comment}</p>
-                <p className="text-sm text-gray-500">
-                  Rating: {review.rating} ⭐
-                </p>
+                <div className="flex items-center gap-2">
+                  {" "}
+                  <p className="text-sm text-gray-500">
+                    Rating: {review.rating}
+                  </p>
+                  <Rating rating={review.rating} />
+                </div>
               </div>
             ))}
           </div>

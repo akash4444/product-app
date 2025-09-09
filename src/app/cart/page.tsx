@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Plus, Minus, Trash2, ShoppingBag, CheckCircle } from "lucide-react";
+import { Plus, Minus, Trash2, CheckCircle } from "lucide-react";
 import useCartStore from "@/store/cartStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 
 const Cart = () => {
   const cartItems = useCartStore((state) => state.cartItems);
@@ -45,7 +46,6 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4 lg:px-6 space-y-2">
-        {/* Header */}
         <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-3 flex flex-col items-center text-center">
           <h1 className="text-2xl sm:text-5xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
             Your Cart
@@ -55,14 +55,12 @@ const Cart = () => {
           </p>
         </div>
 
-        {/* Empty Cart */}
         {cartItems.length === 0 ? (
           <Card className="bg-white border border-gray-200 rounded-2xl shadow-md p-8 flex flex-col items-center text-center">
-            <ShoppingBag className="h-16 w-16 text-gray-300 mb-4" />
             <h2 className="text-xl font-semibold text-gray-800">
               Your cart is empty
             </h2>
-            <p className="text-gray-500 mt-1">Start adding products now!</p>
+            <p className="text-gray-500 mt-1">Start adding products now</p>
             <Button
               onClick={() => router.push("/")}
               className="mt-4 bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 text-white rounded-lg px-5 py-2"
@@ -72,7 +70,6 @@ const Cart = () => {
           </Card>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
-            {/* Cart Items */}
             <Card className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl shadow-md">
               <CardHeader className="flex w-full justify-between">
                 <CardTitle className="text-lg font-bold text-gray-800">
@@ -96,16 +93,17 @@ const Cart = () => {
                       key={item.id}
                       className="flex flex-col sm:flex-row items-center justify-between gap-3 border border-[#cccccc] rounded-xl p-3 bg-white hover:bg-gray-50 transition"
                     >
-                      {/* Product Details */}
                       <div className="flex items-center gap-3 w-full sm:w-3/4">
-                        <div className="relative h-20 w-20 rounded-lg overflow-hidden">
-                          <Image
-                            src={item.thumbnail || "/images/placeholder.png"}
-                            alt={item.title}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
+                        <Link href={`/product/${item.id}`}>
+                          <div className="relative h-20 w-20 rounded-lg overflow-hidden">
+                            <Image
+                              src={item.thumbnail || "/images/placeholder.png"}
+                              alt={item.title}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        </Link>
                         <div>
                           <h3 className="text-base font-medium text-gray-800 line-clamp-1">
                             {item.title}
@@ -116,7 +114,6 @@ const Cart = () => {
                         </div>
                       </div>
 
-                      {/* Quantity Controls */}
                       <div className="flex items-center gap-2">
                         <div className="flex items-center bg-black-100">
                           <Button
@@ -151,7 +148,6 @@ const Cart = () => {
               </ScrollArea>
             </Card>
 
-            {/* Order Summary */}
             <Card className="h-fit sticky top-20 bg-white border border-gray-200 rounded-2xl shadow-md">
               <CardHeader className="py-4 px-6">
                 <CardTitle className="text-lg font-bold text-gray-800">
@@ -175,19 +171,20 @@ const Cart = () => {
                     ${totalPrice.toFixed(2)}
                   </span>
                 </div>
-                <Button
-                  onClick={handleCheckout}
-                  className="w-full mt-4 bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 text-white rounded-lg py-3"
-                >
-                  Checkout
-                </Button>
+                <div className="flex justify-center">
+                  <Button
+                    onClick={handleCheckout}
+                    className=" mt-4 bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 text-white rounded-lg py-3"
+                  >
+                    Checkout
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
         )}
       </div>
 
-      {/* Success Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[400px] bg-white text-center">
           <DialogHeader>
@@ -199,10 +196,10 @@ const Cart = () => {
           </p>
           <DialogFooter>
             <Button
-              className="mt-4 w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 text-white"
+              className="mt-4  bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 text-white"
               onClick={() => {
                 setIsModalOpen(false);
-                router.push("/"); // redirect to homepage
+                router.push("/");
               }}
             >
               Continue Shopping

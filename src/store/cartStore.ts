@@ -1,17 +1,12 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { CartItem } from "@/types/productTypes";
 
-// Define the structure of a cart item
-type CartItem = {
-  id: string;
-  title: string;
-  price: number;
-  quantity: number;
-};
+
 
 type AppState = {
   cartItems: CartItem[];
-  addToCart: (item: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
+  addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
   incrementItem: (id: string) => void;
   decrementItem: (id: string) => void;
@@ -73,8 +68,7 @@ const useCartStore = create<AppState>()(
         },
       }),
       {
-        name: "cart-storage", // key in localStorage
-        getStorage: () => localStorage, // optional, default is localStorage
+        name: "cart",
       }
     )
   )

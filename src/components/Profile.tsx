@@ -7,7 +7,8 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { User, LogOut, Settings, ShoppingCart } from "lucide-react";
+import { User, LogOut, Settings } from "lucide-react";
+import CartIcon from "./CartIcon";
 
 const Profile = () => {
   return (
@@ -20,7 +21,7 @@ const Profile = () => {
           <MenubarContent className="w-48 rounded-xl p-2 mr-2 mt-1 shadow-lg bg-black/50 backdrop-blur-md text-white">
             <Link href="/my-profile" passHref>
               <MenubarItem className="flex items-center gap-2 cursor-pointer rounded-md px-3 py-2 hover:bg-white/20 transition-colors">
-                <User className="h-4 w-4" />
+                <User className="h-5 w-5" />
                 My Profile
               </MenubarItem>
             </Link>
@@ -33,8 +34,10 @@ const Profile = () => {
             </Link>
 
             <Link href="/cart" passHref>
-              <MenubarItem className="flex items-center gap-2 cursor-pointer rounded-md px-3 py-2 hover:bg-white/20 transition-colors">
-                <ShoppingCart className="h-4 w-4" />
+              <MenubarItem className="flex items-center gap-3 cursor-pointer rounded-md px-3 py-2 hover:bg-white/20 transition-colors">
+                <div className="h-4 w-4">
+                  <CartIcon />
+                </div>
                 Cart
               </MenubarItem>
             </Link>

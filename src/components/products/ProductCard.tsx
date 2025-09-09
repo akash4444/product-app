@@ -1,8 +1,15 @@
 import Image from "next/image";
 import Rating from "../Rating";
 import Link from "next/link";
+import { CartItem } from "@/types/productTypes";
 
-export default function ProductCard({ product, addToCart }) {
+export default function ProductCard({
+  product,
+  addToCart,
+}: {
+  product: CartItem;
+  addToCart: (product: CartItem) => void;
+}) {
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col h-full">
       {/* Product Image */}
@@ -11,14 +18,14 @@ export default function ProductCard({ product, addToCart }) {
           <Image
             src={product.thumbnail || "/images/placeholder.png"} // fallback image
             alt={product.title || "Product Image"}
-            fill
             className="object-contain"
+            width={100}
+            height={100}
             loading="lazy"
           />
         </div>
       </Link>
 
-      {/* Product Info */}
       <div className="p-4 flex-1 flex flex-col justify-between">
         <Link href={`product/${product?.id}`}>
           <h3 className="text-gray-800 font-medium text-base mb-2 line-clamp-2 cursor-pointer">
@@ -37,7 +44,6 @@ export default function ProductCard({ product, addToCart }) {
         </Link>
       </div>
 
-      {/* Action Button */}
       <div className="p-4 pt-0">
         <button
           onClick={() => addToCart(product)}

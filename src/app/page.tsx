@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/pagination";
 import useAppStore from "@/store/appStore";
 import useCartStore from "@/store/cartStore";
+import { CartItem } from "@/types/productTypes";
 
 export default function ProductPage() {
   const router = useRouter();
@@ -24,14 +25,13 @@ export default function ProductPage() {
 
   const { addToCart } = useCartStore();
 
-  // Sync page from URL once
   useEffect(() => {
     const pageFromUrl = parseInt(searchParams.get("page") || "1", 10) - 1;
     if (!isNaN(pageFromUrl) && pageFromUrl !== productPageNumber) {
       setProductPageNumber(pageFromUrl);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]); // 👈 Remove productPageNumber from deps to avoid looping
+  }, [searchParams]);
 
   // Fetch Products
   const fetchProducts = async () => {
@@ -69,14 +69,12 @@ export default function ProductPage() {
     router.push(`?page=${newPage}`);
   };
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product: CartItem) => {
     addToCart(product);
   };
 
   if (isLoading) return <Loading />;
-  if (isError) return <p>{error.message}</p>;
 
-  if (isLoading) return <Loading />;
   if (isError)
     return <p className="text-red-500 text-center mt-10">{error.message}</p>;
 
@@ -114,12 +112,11 @@ export default function ProductPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full max-w-5xl">
-        {data?.products?.map((p) => (
+        {data?.products?.map((p: CartItem) => (
           <ProductCard key={p.id} product={p} addToCart={handleAddToCart} />
         ))}
       </div>
 
-      {/* Pagination */}
       <Pagination>
         <PaginationContent>
           <PaginationItem>

@@ -1,5 +1,4 @@
-// components/Loader.tsx
-export default function Loader() {
+const Loader = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
       <div className="flex space-x-2">
@@ -9,4 +8,6 @@ export default function Loader() {
       </div>
     </div>
   );
-}
+};
+
+export default Loader;
